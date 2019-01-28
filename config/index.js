@@ -1,6 +1,9 @@
 const { env } = process
 module.exports = {
-    host: env.HOST,
-    port: env.PORT,
-    jwtSecret: env.JWT_SECRET
+  host: env.HOST,
+  port: env.PORT,
+  jwtSecret: env.JWT_SECRET,
+  mongo: {
+    host: env.MONGO_URI
+  }
 }
