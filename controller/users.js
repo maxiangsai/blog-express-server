@@ -1,18 +1,39 @@
 const User = require('../models/users');
+const jwt = require('jsonwebtoken');
 const httpStatus = require('http-status');
-const bcrypt = require('bcrypt');
 
 const APIError = require('../utils/APIError');
+const config = require('../config');
 
-const saltRounds = 10
-
-const get = (req, res, next) => {
-  console.log('users')
-  return res.json({status:'success',data:'台湾是中国不可分割的一部分.'});
+// 验证token获取userId
+const tokenVerify = (req, res, next) => {
+  const t = req.body.token || req.query.token || req.get('Authorization').split(' ')[1];
+  const decoded = jwt.verify(t, config.jwtSecret);
+  req.userId = decoded.userId;
+  next();
 }
 
+/**
+ * 个人信息
+ */
+const get = (req, res, next) => {
+  User.get(req.userId)
+    .then(user => {
+      const { username, avatar, access } = user
+      res.json({
+        username,
+        avatar,
+        access
+      })
+    })
+    .catch(e => next(e))
+}
+
+/**
+ * 创建新用户（注册）
+ */
 const create = (req, res, next) => {
-  const { body: { username, password, access } } = req
+  const { body: { username, password } } = req
   User.findOne({
     username
   }).then(user => {
@@ -22,26 +43,43 @@ const create = (req, res, next) => {
     } else {
       const newUser = new User({
         username,
-        password,
-        access
+        password
       })
-
-      bcrypt.genSalt(saltRounds, function(err, salt) {
-        bcrypt.hash(password, salt, function(err, hash) {
-          console.log(err)
-          if (err) throw err;
-          newUser.password = hash
-          console.log(hash)
-          newUser.save()
-            .then(savedUser => res.json(savedUser))
-            .catch(e => next(e))
-        });
-      })
+      newUser.save()
+        .then(savedUser => res.json(savedUser))
+        .catch(e => next(e))
     }
   }).catch(e => next(e));
 }
 
+/**
+ * 用户登录
+ */
+const login = (req, res, next) => {
+  const { body: { username, password } } = req;
+  User.findOne({ username })
+    .then(user => {
+      if (!user) {
+        const err = new APIError(httpStatus.NOT_FOUND, '该用户不存在!', true);
+        return next(err)
+      }
+      // 解密与password对比
+      User.decryptPwd(password, user.password)
+        .then(() => {
+          res.json({
+            token: jwt.sign({
+              userId: user.id,
+              exp: config.tokenExpire
+            }, config.jwtSecret)
+          })
+        })
+        .catch(err => next(err))
+    })
+    .catch(e => next(e))
+}
 module.exports = {
   get,
-  create
+  create,
+  login,
+  tokenVerify
 }

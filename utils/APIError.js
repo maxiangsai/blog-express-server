@@ -20,3 +20,5 @@ class APIError extends ExtendableError {
     super(status, message, isPublic)
   }
 }
+
+module.exports = APIError;
