@@ -5,7 +5,7 @@ const router = express.Router();
 const usersRouter = require('./users');
 
 router.route('/')
-  .get(function() {
+  .get(function(req, res) {
     res.send('index Express');
   });
 

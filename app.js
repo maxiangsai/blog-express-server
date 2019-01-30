@@ -33,6 +33,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.all('*', function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'OPTIONS,GET,POST,PUT,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Origin,X-Requested-With,Content-Type,Accept,Authorization');
+  res.header('content-type', 'application/json; charset=utf-8');
+  next();
+})
 app.use('/v1', routes);
 
 // 统一用APIError处理错误，给下个中间件(error handler)处理返回

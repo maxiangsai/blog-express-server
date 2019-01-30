@@ -19,8 +19,9 @@ const tokenVerify = (req, res, next) => {
 const get = (req, res, next) => {
   User.get(req.userId)
     .then(user => {
-      const { username, avatar, access } = user
+      const { id, username, avatar, access } = user
       res.json({
+        id,
         username,
         avatar,
         access
