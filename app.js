@@ -7,6 +7,7 @@ const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
 const httpStatus = require('http-status');
+const expressValidation = require('express-validation')
 const APIError = require('./utils/APIError')
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -44,13 +45,12 @@ app.use('/v1', routes);
 
 // 统一用APIError处理错误，给下个中间件(error handler)处理返回
 app.use((err, req, res, next) => {
-  // if (err instanceof expressValidation.ValidationError) {
-  //   // 入参校验（joi）错误信息（数组）
-  //   const unifiedErrorMessage = err.errors.map(error => error.messages.join('. ')).join(' and ');
-  //   const error = new APIError(err.status, unifiedErrorMessage, true);
-  //   return next(error);
-  // } else 
-  if (!(err instanceof APIError)) {
+  if (err instanceof expressValidation.ValidationError) {
+    // 入参校验（joi）错误信息（数组)
+    const unifiedErrorMessage = err.errors.map(error => error.messages.join('. ')).join(' and ');
+    const error = new APIError(err.status, unifiedErrorMessage, true);
+    return next(error);
+  } else if (!(err instanceof APIError)) {
     // 非APIError 其他错误
     const apiError = new APIError(err.status, err.message, err.isPublic);
     return next(apiError);

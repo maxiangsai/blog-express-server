@@ -1,11 +1,11 @@
 'use strict';
 const express = require('express');
+const userCtrl = require('../controller/users');
+const tokenVerify = require('../middleware/verifyToken');
+const paramValidation = require('../utils/param-validation');
+const validation = require('express-validation');
+
 const router = express.Router();
-const userCtrl = require('../controller/users')
-const JWT = require('jsonwebtoken');
-
-const {tokenVerify} = require('../utils/router-helper');
-
 /**
  * @api {post} /users/register 用户注册
  * @apiGroup User
@@ -21,7 +21,7 @@ const {tokenVerify} = require('../utils/router-helper');
  * @apiErrorExample {json} Error-Response:
  *    errMsg: ""
  */
-router.post('/register', userCtrl.create);
+router.post('/register', validation(paramValidation.createUser), userCtrl.create);
 
 /**
  * @api {post} /users/login 用户登录
@@ -29,7 +29,7 @@ router.post('/register', userCtrl.create);
  * @apiParam {string} username
  * @apiParam {string} password
  */
-router.post('/login', userCtrl.login)
+router.post('/login', validation(paramValidation.login), userCtrl.login)
 
 /**
  * @api {post} /users 个人信息
@@ -39,5 +39,5 @@ router.post('/login', userCtrl.login)
  * @apiParam {string} avatar
  * @apiParam {string} access
  */
-router.get('/', userCtrl.tokenVerify, userCtrl.get)
+router.get('/', tokenVerify, userCtrl.get)
 module.exports = router;

@@ -22,17 +22,15 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     default: 'admin'
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
   }
+}, {
+  timestamps: true
 })
 
 UserSchema.statics = {
   /**
    * 根据用户id查找用户
-   * @param {number} id 
+   * @param {number} id
    */
   get (id) {
     return this.findById(id)
@@ -73,4 +71,5 @@ UserSchema.pre('save', function(next) {
     });
   })
 })
+
 module.exports = mongoose.model('User', UserSchema);
