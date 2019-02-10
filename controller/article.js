@@ -7,7 +7,8 @@ const list = (req, res, next) => {
     page = 1,
     limit = 10,
     id = '',
-    keyword = ''
+    keyword = '',
+    flag = 3
   } = req.query
   keyword = decodeURIComponent(keyword);
   limit = Number(limit);
@@ -45,9 +46,11 @@ const list = (req, res, next) => {
       flag
     }
     let total = 0
+    Article.find(findOption).then(list =>  {
+      total = list.length;
+    })
     Article.list(findOption, { skip, limit })
       .then(list => {
-        total = list.length;
         res.json({
           total,
           data: list
@@ -68,8 +71,10 @@ const getArticle = (req, res, next) => {
 
 const load = (req, res, next) => {
   const { id } = req.params
+  console.log(req)
   return Article.get(id)
     .then(article => {
+      console.log(article)
       req.article = article;
       return next();
     })
@@ -93,6 +98,7 @@ const update = (req, res, next) => {
   article.title = req.body.title
   article.content = req.body.content
   article.posterImg = req.body.posterImg
+  article.flag = req.body.flag
 
   article.save()
     .then(savedArticle => res.json({ data: savedArticle }))
@@ -101,7 +107,7 @@ const update = (req, res, next) => {
 
 const remove = (req, res, next) => {
   const article = req.article;
-  article.save()
+  article.remove()
     .then(savedArticle => res.json({ data: savedArticle }))
     .catch(e => next(e));
 }

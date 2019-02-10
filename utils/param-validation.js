@@ -12,7 +12,9 @@ module.exports = {
     body: {
       title: Joi.string().required(),
       content: Joi.string().required(),
-      posterImg: Joi.string().required()
+      posterImg: Joi.string().required(),
+      likeNum: Joi.number(),
+      flag: Joi.number()
     }
   },
   updateArticle: {
@@ -23,6 +25,11 @@ module.exports = {
     },
     params: {
       id: Joi.string().required()
+    }
+  },
+  createTag: {
+    body: {
+      name: Joi.string().required()
     }
   },
   createUser: {

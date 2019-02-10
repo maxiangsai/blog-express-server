@@ -11,11 +11,15 @@ const get = (req, res, next) => {
   .catch(e => next(e));
 }
 
-const post = (req, res, next) => {
-  Tag.post(req.body)
+const create = (req, res, next) => {
+  Tag.create(req.body)
     .then(t => {
       const tag = new Tag(req.body);
-      res.json({ data: tag });
+      tag.save()
+        .then(savedTag => {
+          res.json({ data: savedTag });
+        })
+        .catch(e => next(e));
     })
     .catch(e => next(e));
 }
@@ -30,6 +34,6 @@ const update = (req, res, next) => {
 
 module.exports = {
   get,
-  post,
+  create,
   update
 }

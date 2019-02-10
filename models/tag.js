@@ -15,7 +15,7 @@ const TagSchema = new Schema({
 })
 
 TagSchema.statics = {
-  post (body) {
+  create (body) {
     return this.findOne(body)
       .exec()
       .then(tag => {

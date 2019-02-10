@@ -22,5 +22,5 @@ router.route('/:id')
   // 删除文章
   .delete(validate(paramValidation.idCheck), tokenVerify, articleCtrl.remove);
 
-// router.param('id', articleCtrl.load);
+router.param('id', articleCtrl.load);
 module.exports = router;

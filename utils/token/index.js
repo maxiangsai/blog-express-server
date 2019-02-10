@@ -11,8 +11,3 @@ exports.sign = (user) => {
   })
   return token
 }
-
-exports.verify = (token) => {
-  const decoded = jwt.verify(token, secret)
-  return decoded
-}

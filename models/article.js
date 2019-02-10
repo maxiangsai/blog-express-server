@@ -48,12 +48,12 @@ const ArticleSchema = new Schema({
 ArticleSchema.statics = {
   get (id) {
     return this.findById(id)
-      .exec()
       .populate({
         path: 'tags',
         select: 'id name'
       })
       .then(article => {
+        console.log(article)
         if (article) {
           return article;
         }
