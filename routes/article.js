@@ -9,7 +9,7 @@ const router = express.Router()
 
 router.route('/')
   // 首页文章列表
-  .get(tokenVerify, flag('index'), articleCtrl.list)
+  .get(flag('index'), articleCtrl.list)
   // 创建文章 /v1/articles
   .post(validate(paramValidation.createArticle), tokenVerify, articleCtrl.create);
 
