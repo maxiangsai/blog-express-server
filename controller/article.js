@@ -7,9 +7,9 @@ const list = (req, res, next) => {
     page = 1,
     limit = 10,
     id = '',
-    keyword = '',
-    flag = 3
+    keyword = ''
   } = req.query
+  let flag = res.locals.flag
   keyword = decodeURIComponent(keyword);
   limit = Number(limit);
   let findOption = {};

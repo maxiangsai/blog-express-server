@@ -8,7 +8,8 @@ const validate = require('express-validation');
 const paramValid = require('../utils/param-validation');
 
 router.route('/')
-  .get(tokenVerify, tagCtrl.get)
+  .get(tagCtrl.get)
   .post(validate(paramValid.createTag), tokenVerify, tagCtrl.create)
+  .put(validate(paramValid.updateTag), tokenVerify, tagCtrl.update)
 
 module.exports = router;

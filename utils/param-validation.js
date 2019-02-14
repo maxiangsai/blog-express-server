@@ -29,6 +29,12 @@ module.exports = {
   },
   createTag: {
     body: {
+      id: Joi.string().required(),
+      name: Joi.string().required()
+    }
+  },
+  updateTag: {
+    body: {
       name: Joi.string().required()
     }
   },
