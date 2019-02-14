@@ -6,7 +6,8 @@ const tokenVerify = require('../middleware/verifyToken')
 router.get('/token', tokenVerify, (req, res, next) => {
   const token = qiniuConfig.uptoken(req.query.key)
   res.json({
-    token
+    code: 200,
+    data: token
   })
 })
 

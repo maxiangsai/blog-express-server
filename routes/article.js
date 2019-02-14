@@ -16,7 +16,7 @@ router.route('/')
 // /v1/articles/:id
 router.route('/:id')
   // 文章详情
-  .get(tokenVerify, articleCtrl.getArticle)
+  .get(articleCtrl.getArticle)
   // 修改文章
   .put(validate(paramValidation.updateArticle), tokenVerify, articleCtrl.update)
   // 删除文章

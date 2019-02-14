@@ -69,6 +69,7 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
   res.status(err.status).json({
+    code: err.status,
     message: err.isPublic ? err.message : httpStatus[err.status]
   });
 });

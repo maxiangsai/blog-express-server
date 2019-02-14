@@ -52,6 +52,7 @@ const list = (req, res, next) => {
     Article.list(findOption, { skip, limit })
       .then(list => {
         res.json({
+          code: 200,
           total,
           data: list
         })
@@ -65,16 +66,15 @@ const list = (req, res, next) => {
  */
 const getArticle = (req, res, next) => {
   return res.json({
+    code: 200,
     data: req.article
   });
 }
 
 const load = (req, res, next) => {
   const { id } = req.params
-  console.log(req)
   return Article.get(id)
     .then(article => {
-      console.log(article)
       req.article = article;
       return next();
     })
@@ -88,27 +88,24 @@ const create = (req, res, next) => {
   let body = req.body
   const article = new Article(body)
   article.save()
-    .then(resArticle => res.json(resArticle))
+    .then(resArticle => res.json({ code: 200, data: resArticle }))
     .catch(e => next(e));
 }
 
+/**
+ * 修改文章
+ */
 const update = (req, res, next) => {
   const article = req.article
-
-  article.title = req.body.title
-  article.content = req.body.content
-  article.posterImg = req.body.posterImg
-  article.flag = req.body.flag
-
-  article.save()
-    .then(savedArticle => res.json({ data: savedArticle }))
+  article.update(article)
+    .then(savedArticle => res.json({ code: 200, data: savedArticle }))
     .catch(e => next(e));
 }
 
 const remove = (req, res, next) => {
   const article = req.article;
   article.remove()
-    .then(savedArticle => res.json({ data: savedArticle }))
+    .then(savedArticle => res.json({ code: 200, data: savedArticle }))
     .catch(e => next(e));
 }
 

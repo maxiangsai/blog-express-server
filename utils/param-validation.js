@@ -18,7 +18,11 @@ module.exports = {
     }
   },
   updateArticle: {
+    params: {
+      id: Joi.string().required()
+    },
     body: {
+      summary: Joi.string(),
       title: Joi.string().required(),
       content: Joi.string().required(),
       posterImg: Joi.string().required()
@@ -29,13 +33,18 @@ module.exports = {
   },
   createTag: {
     body: {
-      id: Joi.string().required(),
       name: Joi.string().required()
     }
   },
   updateTag: {
     body: {
+      id: Joi.string().required(),
       name: Joi.string().required()
+    }
+  },
+  deleteTag: {
+    body: {
+      id: Joi.string().required(),
     }
   },
   createUser: {

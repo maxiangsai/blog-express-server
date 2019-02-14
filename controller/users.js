@@ -11,10 +11,8 @@ const get = (req, res, next) => {
     .then(user => {
       const { id, username, avatar, access } = user
       res.json({
-        id,
-        username,
-        avatar,
-        access
+        code: 200,
+        data: { id, username, avatar, access }
       })
     })
     .catch(e => next(e))
@@ -37,7 +35,7 @@ const create = (req, res, next) => {
         password
       })
       newUser.save()
-        .then(savedUser => res.json(savedUser))
+        .then(savedUser => res.json({ code: 200, data: savedUser }))
         .catch(e => next(e))
     }
   }).catch(e => next(e));
@@ -58,7 +56,8 @@ const login = (req, res, next) => {
       User.decryptPwd(password, user.password)
         .then(() => {
           res.json({
-            token: sign(user)
+            code: 200,
+            data: sign(user)
           })
         })
         .catch(err => next(err))

@@ -11,5 +11,6 @@ router.route('/')
   .get(tagCtrl.get)
   .post(validate(paramValid.createTag), tokenVerify, tagCtrl.create)
   .put(validate(paramValid.updateTag), tokenVerify, tagCtrl.update)
+  .delete(validate(paramValid.deleteTag), tokenVerify, tagCtrl.remove)
 
 module.exports = router;
