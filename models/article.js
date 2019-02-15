@@ -53,7 +53,6 @@ ArticleSchema.statics = {
         select: 'id name'
       })
       .then(article => {
-        console.log(article)
         if (article) {
           return article;
         }

@@ -96,8 +96,15 @@ const create = (req, res, next) => {
  * 修改文章
  */
 const update = (req, res, next) => {
-  const article = req.article
-  article.update(article)
+  const article = req.article // 文章实例
+  article.title = req.body.title
+  article.content = req.body.content
+  article.summary = req.body.summary
+  article.posterImg = req.body.posterImg
+  article.flag = req.body.flag
+  article.tags = req.body.tags
+
+  article.save(article)
     .then(savedArticle => res.json({ code: 200, data: savedArticle }))
     .catch(e => next(e));
 }
