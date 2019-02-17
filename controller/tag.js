@@ -1,4 +1,5 @@
 const Tag = require('../models/tag');
+const Article = require('../models/article');
 
 const get = (req, res, next) => {
   Tag.list().then(list => {
@@ -44,8 +45,42 @@ const remove = (req, res, next) => {
       })
     }).catch(e => next(e))
 }
+
+const getName = (req, res, next) => {
+  Tag.findById(req.params.id)
+    .then(tag => {
+      req.name = tag.name
+      next()
+    })
+    .catch(e => next(e))
+}
+
+/**
+ * 根据tag id查询对应文章列表
+ */
+const getListByTag = (req, res, next) => {
+  const { id } = req.params
+  const name = req.name
+  Article.list({
+    flag: {
+      $ne: 3
+    },
+    tags: id
+  }).then(ret => {
+    res.json({
+      code: 200,
+      data: ret.data,
+      total: ret.total,
+      name
+    })
+  })
+  .catch(e => next(e))
+}
+
 module.exports = {
   get,
+  getName,
+  getListByTag,
   create,
   update,
   remove

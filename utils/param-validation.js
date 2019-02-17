@@ -47,6 +47,11 @@ module.exports = {
       id: Joi.string().required(),
     }
   },
+  search: {
+    params: {
+      keyword: Joi.string().required()
+    }
+  },
   createUser: {
     body: {
       username: Joi.string().required(),

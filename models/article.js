@@ -60,16 +60,26 @@ ArticleSchema.statics = {
         return Promise.reject(err);
       })
   },
-  list (findOption, { skip = 0, limit = 10 } = {}) {
-    return this.find(findOption)
-      .populate({
+  list (findOption, filterOption, { skip = 0, limit = 10 } = {}) {
+    filterOption = Object.assign({
+      title: 1,
+      summary: 1,
+      posterImg: 1
+    }, filterOption)
+    return Promise.all([
+      this.find(findOption, filterOption).exec(),
+      this.find(findOption, filterOption).populate({
         path: 'tags',
         select: 'id name'
       })
       .sort({ createdAt: -1 })
       .skip(+skip)
       .limit(+limit)
-      .exec();
+      .exec()
+    ]).then(result => {
+      const [all, data] = result
+      return { total: all.length, data }
+    })
   }
 }
 

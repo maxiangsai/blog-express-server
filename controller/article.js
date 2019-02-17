@@ -4,27 +4,17 @@ const Article = require('../models/article');
 
 const list = (req, res, next) => {
   let {
+    keyword = '',
     page = 1,
-    limit = 10,
-    id = '',
-    keyword = ''
-  } = req.query
-  let flag = res.locals.flag
+    limit = 10
+  } = req.params
   keyword = decodeURIComponent(keyword);
   limit = Number(limit);
   let findOption = {};
+  let flag = res.locals.flag;
   let skip = Number((page - 1) * limit) || 0;
-  let reg = new RegExp(keyword, 'i')
-
-  if (id) {
-    // 通过标签id查询
-    findOption = {
-      flag: {
-        $ne: 3
-      },
-      tags: [id]
-    }
-  } else if (keyword) {
+  let reg = new RegExp(keyword, 'i');
+  if (keyword) {
     // 通过keyword查询
     findOption = {
       flag: {
@@ -41,24 +31,36 @@ const list = (req, res, next) => {
       }]
     }
   } else {
-    // 首页文章
+    // 所有文章
     findOption = {
       flag
     }
-    let total = 0
-    Article.find(findOption).then(list =>  {
-      total = list.length;
-    })
-    Article.list(findOption, { skip, limit })
-      .then(list => {
-        res.json({
-          code: 200,
-          total,
-          data: list
-        })
-      })
-      .catch(e => next(e));
   }
+  Article.list(findOption, null, { skip, limit }).then(data => {
+    res.json({
+      code: 200,
+      data: data.data,
+      total: data.total
+    })
+  }).catch(e => next(e))
+}
+
+const getArticlesByTime = (req, res, next) => {
+  const filterOption = {
+    title: 1,
+    summary: 1,
+    posterImg: 1
+  }
+  Article.find({}, filterOption)
+    .sort({
+      createdAt: -1
+    })
+    .then(list => {
+      res.json({
+        code: 200,
+        data: list
+      })
+    })
 }
 
 /**
@@ -119,6 +121,7 @@ const remove = (req, res, next) => {
 module.exports = {
   list,
   getArticle,
+  getArticlesByTime,
   create,
   update,
   remove,

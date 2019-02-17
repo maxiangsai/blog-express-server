@@ -13,4 +13,7 @@ router.route('/')
   .put(validate(paramValid.updateTag), tokenVerify, tagCtrl.update)
   .delete(validate(paramValid.deleteTag), tokenVerify, tagCtrl.remove)
 
+// 获取每个标签下的文章列表
+router.route('/:id')
+  .get(tagCtrl.getName, tagCtrl.getListByTag)
 module.exports = router;
