@@ -17,11 +17,9 @@ const routes = require('./routes/index');
 
 const app = express();
 
-// 使mongoose promise化
+// Connect to mongodb
 Promise = require('bluebird')
 mongoose.Promise = Promise
-
-// Connect to mongodb
 const mongoUri = config.mongo.host
 mongoose.connect(mongoUri, { useNewUrlParser: true })
 mongoose.connection.on('error', () => {
@@ -45,7 +43,6 @@ app.use('/v1', routes);
 
 // 统一用APIError处理错误，给下个中间件(error handler)处理返回
 app.use((err, req, res, next) => {
-  console.log(err)
   if (err instanceof expressValidation.ValidationError) {
     // 入参校验（joi）错误信息（数组)
     const unifiedErrorMessage = err.errors.map(error => error.messages.join('. ')).join(' and ');

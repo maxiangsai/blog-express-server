@@ -6,7 +6,7 @@ const usersRouter = require('./users');
 const articleRouter = require('./article');
 const tagRouter = require('./tag');
 const uploadRouter = require('./upload');
-const searchRouter = require('./search')
+const searchRouter = require('./search');
 
 // 用户相关路由
 router.use('/users', usersRouter);
