@@ -1,18 +1,18 @@
-module.exports = (flag) => {
+module.exports = (state) => {
   return (req, res, next) => {
-    switch (flag) {
+    switch (state) {
       case 'draft':
-        res.locals.flag = 0
+        res.locals.state = 0
         next()
         break;
 
       case 'index':
-        res.locals.flag = 1
+        res.locals.state = 1
         next()
         break;
 
       default:
-        res.locals.flag = 1
+        res.locals.state = 1
         next()
         break;
     }

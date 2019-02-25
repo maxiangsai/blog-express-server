@@ -1,7 +1,10 @@
 const Article = require('../models/article');
 
-// flag: 0置顶 1首页 2非首页 3草稿
 
+/**
+ * state: 0草稿 1发布
+ * 默认查找state为1的文章
+ */
 const list = (req, res, next) => {
   let {
     keyword = '',
@@ -10,15 +13,15 @@ const list = (req, res, next) => {
   } = req.params
   keyword = decodeURIComponent(keyword);
   limit = Number(limit);
+  const state = res.locals.state
   let findOption = {};
-  let flag = res.locals.flag;
   let skip = Number((page - 1) * limit) || 0;
   let reg = new RegExp(keyword, 'i');
   if (keyword) {
     // 通过keyword查询
     findOption = {
-      flag: {
-        $ne: 3
+      state: {
+        $ne: 0
       },
       $or: [{
         title: {
@@ -33,7 +36,7 @@ const list = (req, res, next) => {
   } else {
     // 所有文章
     findOption = {
-      flag
+      state
     }
   }
   Article.list(findOption, null, { skip, limit }).then(data => {
@@ -103,7 +106,7 @@ const update = (req, res, next) => {
   article.content = req.body.content
   article.summary = req.body.summary
   article.posterImg = req.body.posterImg
-  article.flag = req.body.flag
+  article.state = req.body.state
   article.tags = req.body.tags
 
   article.save(article)

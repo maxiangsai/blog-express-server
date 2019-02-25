@@ -4,7 +4,7 @@ const httpStatus = require('http-status');
 const APIError = require('../utils/APIError');
 
 const Schema = mongoose.Schema;
-// flag: 0置顶 1首页 2非首页 3草稿
+// state: 1发布 0草稿
 const ArticleSchema = new Schema({
   title: {
     required: true,
@@ -33,9 +33,9 @@ const ArticleSchema = new Schema({
     type: Object,
     default: null
   },
-  flag: {
+  state: {
     type: Number,
-    default: 3
+    default: 0
   },
   tags: [{
     type: Schema.Types.ObjectId,
