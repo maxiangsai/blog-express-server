@@ -24,6 +24,7 @@ router.route('/:id')
   .delete(validate(paramValidation.idCheck), tokenVerify, articleCtrl.remove);
 
 // 草稿
-router.get('/draft', state('draft'), articleCtrl.list)
+router.route('/draft', state('draft'), articleCtrl.list)
+router.put('/draft', state('draft'), validate(paramValidation.updateArticle), articleCtrl.update)
 router.param('id', articleCtrl.load);
 module.exports = router;

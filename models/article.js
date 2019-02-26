@@ -35,7 +35,7 @@ const ArticleSchema = new Schema({
   },
   state: {
     type: Number,
-    default: 0
+    default: 1
   },
   tags: [{
     type: Schema.Types.ObjectId,

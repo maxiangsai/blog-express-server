@@ -10,7 +10,7 @@ const list = (req, res, next) => {
     keyword = '',
     page = 1,
     limit = 10
-  } = req.params
+  } = req.query;
   keyword = decodeURIComponent(keyword);
   limit = Number(limit);
   const state = res.locals.state
@@ -48,6 +48,9 @@ const list = (req, res, next) => {
   }).catch(e => next(e))
 }
 
+/**
+ * 按时间归档
+ */
 const getArticlesByTime = (req, res, next) => {
   const filterOption = {
     title: 1,
