@@ -3,11 +3,11 @@ require('env2')('./.env');
 const config = require('./config');
 
 const path = require('path');
+const fs = require('fs');
 const express = require('express');
 const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const expressValidation = require('express-validation');
-const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const rfs = require('rotating-file-stream');
 const APIError = require('./utils/APIError');
@@ -22,10 +22,12 @@ mongoose.connection.on('error', () => {
   throw new Error(`无法连接到数据库：${mongoUri}`);
 });
 
+const logPath = path.join(__dirname, 'log');
+fs.existsSync(logPath) || fs.mkdirSync(logPath);
 // middleware
 const accessLogStream = rfs('access.log', {
   interval: '1d',
-  path: path.join(__dirname, 'log')
+  path: logPath
 });
 app.use(logger('combined', { stream: accessLogStream }));
 app.use(express.json());
