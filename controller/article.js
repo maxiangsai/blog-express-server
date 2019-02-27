@@ -9,11 +9,11 @@ const list = (req, res, next) => {
   let {
     keyword = '',
     page = 1,
-    limit = 10
+    limit = 10,
+    state = 1
   } = req.query;
   keyword = decodeURIComponent(keyword);
   limit = Number(limit);
-  const state = res.locals.state
   let findOption = {};
   let skip = Number((page - 1) * limit) || 0;
   let reg = new RegExp(keyword, 'i');
