@@ -8,7 +8,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const expressValidation = require('express-validation');
-const logger = require('morgan');
+const morgan = require('morgan');
 const rfs = require('rotating-file-stream');
 const APIError = require('./utils/APIError');
 
@@ -22,14 +22,14 @@ mongoose.connection.on('error', () => {
   throw new Error(`无法连接到数据库：${mongoUri}`);
 });
 
+// middleware
 const logPath = path.join(__dirname, 'log');
 fs.existsSync(logPath) || fs.mkdirSync(logPath);
-// middleware
 const accessLogStream = rfs('access.log', {
   interval: '1d',
   path: logPath
 });
-app.use(logger('combined', { stream: accessLogStream }));
+app.use(morgan('combined', { stream: accessLogStream }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -71,6 +71,7 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
+  console.log(err)
   res.status(err.status).json({
     code: err.status,
     message: err.isPublic ? err.message : httpStatus[err.status]
