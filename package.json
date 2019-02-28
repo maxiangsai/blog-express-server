@@ -12,7 +12,6 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.3",
-    "cookie-parser": "^1.4.4",
     "env2": "^2.2.2",
     "express": "^4.16.4",
     "express-validation": "^1.0.2",
