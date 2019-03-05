@@ -12,6 +12,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.3",
+    "cors": "^2.8.5",
     "env2": "^2.2.2",
     "express": "^4.16.4",
     "express-validation": "^1.0.2",

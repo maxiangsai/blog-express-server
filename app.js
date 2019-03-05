@@ -7,6 +7,7 @@ const httpStatus = require('http-status');
 const expressValidation = require('express-validation');
 const morgan = require('morgan');
 const rfs = require('rotating-file-stream');
+const cors = require('cors');
 const APIError = require('./utils/APIError');
 const config = require('./config');
 
@@ -31,15 +32,10 @@ app.use(morgan('combined', { stream: accessLogStream }));
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ limit: '5mb', extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-
-// cors origin
-app.all('*', function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'OPTIONS,GET,POST,PUT,DELETE');
-  res.header('Access-Control-Allow-Headers', 'Origin,X-Requested-With,Content-Type,Accept,Authorization');
-  res.header('content-type', 'application/json; charset=utf-8');
-  next();
-});
+app.use(cors({
+  origin: 'http://127.0.0.1',
+  optionsSuccessStatus: 200
+}))
 
 const routes = require('./routes/index');
 app.use('/v1', routes);
