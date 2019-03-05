@@ -1,7 +1,4 @@
 'use strict';
-require('env2')('./.env');
-const config = require('./config');
-
 const path = require('path');
 const fs = require('fs');
 const express = require('express');
@@ -11,6 +8,7 @@ const expressValidation = require('express-validation');
 const morgan = require('morgan');
 const rfs = require('rotating-file-stream');
 const APIError = require('./utils/APIError');
+const config = require('./config');
 
 const app = express();
 // Connect to mongodb
@@ -48,7 +46,6 @@ app.use('/v1', routes);
 
 // 统一用APIError处理错误，给下个中间件(error handler)处理返回
 app.use((err, req, res, next) => {
-  console.log(err)
   if (err instanceof expressValidation.ValidationError) {
     // 入参校验（joi）错误信息（数组)
     const unifiedErrorMessage = err.errors.map(error => error.messages.join('. ')).join(' and ');
@@ -71,7 +68,6 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  console.log(err)
   res.status(err.status).json({
     code: err.status,
     message: err.isPublic ? err.message : httpStatus[err.status]
