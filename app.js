@@ -33,7 +33,7 @@ app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ limit: '5mb', extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors({
-  origin: 'http://127.0.0.1',
+  origin: '*',
   optionsSuccessStatus: 200
 }))
 
