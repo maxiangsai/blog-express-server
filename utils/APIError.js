@@ -2,11 +2,11 @@
  * @extends Error
  */
 class ExtendableError extends Error {
-  constructor(status, message, isPublic) {
-    super(message);
-    this.name = this.constructor.name;
-    this.message = message;
-    this.status = status;
+  constructor(statusCode, message, isPublic) {
+    super(message)
+    this.name = this.constructor.name
+    this.message = message
+    this.statusCode = statusCode
     this.isPublic = isPublic
   }
 }
@@ -16,9 +16,9 @@ class ExtendableError extends Error {
  * @param {string} message
  */
 class APIError extends ExtendableError {
-  constructor (status = 500, message = '服务器错误', isPublic = false) {
-    super(status, message, isPublic)
+  constructor(statusCode = 500, message = '服务器错误', isPublic = false) {
+    super(statusCode, message, isPublic)
   }
 }
 
-module.exports = APIError;
+module.exports = APIError
