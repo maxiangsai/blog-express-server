@@ -1,7 +1,4 @@
 const mongoose = require('mongoose')
-// const bcrypt = require('bcryptjs');
-const httpStatus = require('http-status')
-const APIError = require('../utils/APIError')
 
 const UserSchema = new mongoose.Schema(
   {
@@ -38,7 +35,6 @@ UserSchema.statics = {
     return this.findById(id)
       .exec()
       .then(user => {
-        console.log(user)
         if (user) {
           return {
             statusCode: 200,
@@ -46,15 +42,6 @@ UserSchema.statics = {
           }
         }
       })
-  },
-
-  decryptPwd(inputPwd, userPwd) {
-    return bcrypt.compare(inputPwd, userPwd).then(isMatch => {
-      if (isMatch) {
-        return Promise.resolve()
-      }
-      return Promise.reject(err)
-    })
   }
 }
 

@@ -4,6 +4,7 @@ const Hapi = require('hapi')
 const mongoose = require('mongoose')
 
 // 引入配置
+const registerPlugins = require('./plugins')
 const userRoutes = require('./routes/users')
 const config = require('./config')
 const { port, host, mongo } = config
@@ -13,8 +14,9 @@ const server = Hapi.server({
   host
 })
 
-// 启动服务器
 const init = async () => {
+  // 注册插件
+  await registerPlugins(server)
   // 注册路由
   server.route([...userRoutes])
   // 连接mongodb数据库
@@ -31,5 +33,5 @@ const init = async () => {
 //   console.log(err)
 //   process.exit(1)
 // })
-
+// 启动服务器
 init()

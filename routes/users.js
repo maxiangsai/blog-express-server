@@ -31,9 +31,19 @@ module.exports = [
     path: `${GROUP_NAME}/{userId}`,
     handler: userCtrl.get
   },
+  // 登录
   {
     method: 'POST',
     path: `${GROUP_NAME}/login`,
+    options: {
+      auth: false
+    },
     handler: userCtrl.login
   }
+  // 注册
+  // {
+  //   method: 'POST',
+  //   path: `${GROUP_NAME}/register`,
+  //   handler: userCtrl.register
+  // }
 ]

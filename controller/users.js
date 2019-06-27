@@ -1,8 +1,7 @@
 const User = require('../models/users')
-// const { sign } = require('../utils/token')
-const httpStatus = require('http-status')
-var Boom = require('boom')
-const APIError = require('../utils/APIError')
+const { sign } = require('../utils/token')
+const decrypt = require('../utils/decrypt')
+const Boom = require('boom')
 /**
  * 获取个人信息
  */
@@ -56,23 +55,29 @@ const create = (req, h) => {
  * 用户登录
  */
 const login = (req, h) => {
-  console.log(req.payload)
   const {
     payload: { username, password }
   } = req
-  User.findOne({ username })
+  return User.findOne({ username })
     .then(user => {
+      if (!user) throw new Error()
       // 解密与password对比
-      User.decryptPwd(password, user.password)
+      return decrypt(password, user.password)
         .then(() => {
           return {
             statusCode: 200,
-            data: sign(user)
+            data: {
+              token: sign(user)
+            }
           }
         })
-        .catch(() => Boom.badRequest('用户名或者密码错误'))
+        .catch(err => {
+          throw err
+        })
     })
-    .catch(() => Boom.notFound('该用户不存在'))
+    .catch(() => {
+      return Boom.badRequest('用户名或者密码错误')
+    })
 }
 
 module.exports = {
