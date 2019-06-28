@@ -5,6 +5,7 @@ const Article = require('../models/article')
  * 默认查找state为1的文章
  */
 const list = (req, res, next) => {
+  console.log(req)
   let { page = 1, limit = 10, state = 1 } = req.query
   const { keyword } = req.params
   keyword = decodeURIComponent(keyword)
@@ -43,6 +44,23 @@ const list = (req, res, next) => {
         code: 200,
         data: data.data,
         total: data.total
+      })
+    })
+    .catch(e => next(e))
+}
+
+/**
+ * 获取首页列表
+ */
+const getHomeList = (req, res, next) => {
+  const { limit } = req.query
+  Article.list({
+    state: 1
+  }, null, { limit })
+    .then(data => {
+      res.json({
+        code: 200,
+        ...data
       })
     })
     .catch(e => next(e))
@@ -129,6 +147,7 @@ const remove = (req, res, next) => {
 
 module.exports = {
   list,
+  getHomeList,
   getArticle,
   getArticlesByTime,
   create,

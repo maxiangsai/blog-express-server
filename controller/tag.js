@@ -62,15 +62,11 @@ const getListByTag = (req, res, next) => {
   const { id } = req.params
   const name = req.name
   Article.list({
-    flag: {
-      $ne: 3
-    },
     tags: id
   }).then(ret => {
     res.json({
       code: 200,
-      data: ret.data,
-      total: ret.total,
+      ...ret,
       name
     })
   })
