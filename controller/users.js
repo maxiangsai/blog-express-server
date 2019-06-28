@@ -1,12 +1,13 @@
 const User = require('../models/users')
 const { sign } = require('../utils/token')
 const decrypt = require('../utils/decrypt')
-const Boom = require('boom')
+const boom = require('boom')
 /**
  * 获取个人信息
  */
 const get = (req, h) => {
   const { userId } = req.params
+
   return User.get(userId)
     .then(({ data }) => {
       const { id, username, avatar, access } = data
@@ -16,7 +17,7 @@ const get = (req, h) => {
       }
     })
     .catch(() => {
-      return Boom.notFound('该用户不存在')
+      return boom.notFound('该用户不存在')
     })
 }
 

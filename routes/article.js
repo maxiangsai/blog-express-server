@@ -1,5 +1,6 @@
 // const express = require('express');
-// const articleCtrl = require('../controller/article');
+const Joi = require('joi')
+const articleCtrl = require('../controller/article')
 // const tokenVerify = require('../middleware/verifyToken');
 // const validate = require('express-validation');
 // const paramValidation = require('../utils/param-validation');
@@ -24,11 +25,26 @@
 // router.param('id', articleCtrl.load);
 // module.exports = router;
 module.exports = [
+  // 获取首页列表
   {
     method: 'GET',
     path: '/articles',
-    handler: (req, res) => {
-      
-    }
+    options: {
+      tags: ['api', 'article'],
+      auth: false,
+      validate: {
+        query: {
+          page: Joi.number()
+            .integer()
+            .min(1)
+            .default(1),
+          limit: Joi.number()
+            .integer()
+            .min(1)
+            .default(10)
+        }
+      }
+    },
+    handler: articleCtrl.getHomeList
   }
 ]

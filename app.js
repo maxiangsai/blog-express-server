@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 // 引入配置
 const registerPlugins = require('./plugins')
 const userRoutes = require('./routes/users')
+const articleRoutes = require('./routes/article')
 const config = require('./config')
 const { port, host, mongo } = config
 
@@ -18,7 +19,7 @@ const init = async () => {
   // 注册插件
   await registerPlugins(server)
   // 注册路由
-  server.route([...userRoutes])
+  server.route([...userRoutes, ...articleRoutes])
   // 连接mongodb数据库
   const mongoUri = `${mongo.host}:${mongo.port}/${mongo.databaseName}`
   mongoose.connect(mongoUri, { useNewUrlParser: true })

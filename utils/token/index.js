@@ -1,17 +1,15 @@
 const config = require('../../config')
 const jwt = require('jsonwebtoken')
 
-const { secret, expiresIn } = config.jwt
+const { secret, expire } = config.jwt
 exports.sign = user => {
   const token = jwt.sign(
     {
+      userId: user.id,
       username: user.username,
-      userId: user.id
+      exp: Math.floor(Date.now() / 1000) + expire
     },
-    secret,
-    {
-      expiresIn
-    }
+    secret
   )
   return token
 }

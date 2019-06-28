@@ -1,19 +1,37 @@
-const express = require('express');
-const router = express.Router();
+const Joi = require('joi')
+const tagCtrl = require('../controller/tag')
 
-const tagCtrl = require('../controller/tag');
-const tokenVerify = require('../middleware/verifyToken');
-
-const validate = require('express-validation');
-const paramValid = require('../utils/param-validation');
-
-router.route('/')
-  .get(tagCtrl.get)
-  .post(validate(paramValid.createTag), tokenVerify, tagCtrl.create)
-  .put(validate(paramValid.updateTag), tokenVerify, tagCtrl.update)
-  .delete(validate(paramValid.deleteTag), tokenVerify, tagCtrl.remove)
+// router
+//   .route('/')
+//   .get(tagCtrl.get)
+//   .post(validate(paramValid.createTag), tokenVerify, tagCtrl.create)
+//   .put(validate(paramValid.updateTag), tokenVerify, tagCtrl.update)
+//   .delete(validate(paramValid.deleteTag), tokenVerify, tagCtrl.remove)
 
 // 获取每个标签下的文章列表
-router.route('/:id')
-  .get(tagCtrl.getName, tagCtrl.getListByTag)
-module.exports = router;
+router.route('/:id').get(tagCtrl.getName, tagCtrl.getListByTag)
+
+const GROUP_NAME = '/tag'
+module.exports = [
+  {
+    method: 'GET',
+    path: `${GROUP_NAME}`,
+    options: {
+      tags: ['api', 'users']
+    },
+    handler: tagCtrl.get
+  },
+  {
+    method: 'GET',
+    path: `${GROUP_NAME}/{id}`,
+    options: {
+      tags: ['api', 'users'],
+      validate: {
+        params: {
+          id: Joi.string().required()
+        }
+      }
+    },
+    handler: tagCtrl.get
+  }
+]

@@ -10,6 +10,6 @@ module.exports = {
   },
   jwt: {
     secret: env.JWT_SECRET,
-    expiresIn: '1h'
+    expire: 60 * 60
   }
 }
