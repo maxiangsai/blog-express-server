@@ -1,1 +1,0 @@
-define({  "name": "管理系统接口文档",  "version": "0.1.0",  "description": "",  "title": "博客后台管理系统接口文档",  "url": "http://127.0.0.1/v1",  "sampleUrl": "http://127.0.0.1/v1",  "defaultVersion": "0.0.0",  "apidoc": "0.3.0",  "generator": {    "name": "apidoc",    "time": "2019-01-27T13:56:38.084Z",    "url": "http://apidocjs.com",    "version": "0.17.7"  }});
