@@ -1,6 +1,6 @@
 'use strict'
 const Joi = require('joi')
-const paramValid = require('../utils/param-validate')
+const paramValid = require('../utils/route-helper')
 const userCtrl = require('../controller/users')
 
 const GROUP_NAME = '/user'

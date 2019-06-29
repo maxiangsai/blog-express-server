@@ -1,5 +1,6 @@
 // const express = require('express');
 const Joi = require('joi')
+const routeHelper = require('../utils/route-helper')
 const articleCtrl = require('../controller/article')
 // const tokenVerify = require('../middleware/verifyToken');
 // const validate = require('express-validation');
@@ -24,27 +25,34 @@ const articleCtrl = require('../controller/article')
 //   .delete(validate(paramValidation.idCheck), tokenVerify, articleCtrl.remove);
 // router.param('id', articleCtrl.load);
 // module.exports = router;
+const GROUP_NAME = '/articles'
 module.exports = [
   // 获取首页列表
   {
     method: 'GET',
-    path: '/articles',
+    path: `${GROUP_NAME}`,
     options: {
       tags: ['api', 'article'],
       auth: false,
       validate: {
-        query: {
-          page: Joi.number()
-            .integer()
-            .min(1)
-            .default(1),
-          limit: Joi.number()
-            .integer()
-            .min(1)
-            .default(10)
+        query: routeHelper.pagination
+      }
+    },
+    handler: articleCtrl.getList
+  },
+  // 通过id查询文章
+  {
+    method: 'GET',
+    path: `${GROUP_NAME}/{id}`,
+    options: {
+      tags: ['api', 'article'],
+      auth: false,
+      validate: {
+        params: {
+          id: Joi.string().required()
         }
       }
     },
-    handler: articleCtrl.getHomeList
+    handler: articleCtrl.getArticleById
   }
 ]

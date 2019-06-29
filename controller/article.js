@@ -1,4 +1,4 @@
-const boom = require('boom')
+const Boom = require('boom')
 const Article = require('../models/article')
 
 /**
@@ -49,20 +49,19 @@ const list = (req, res, next) => {
     .catch(e => next(e))
 }
 
-const getHomeList = async (req, h) => {
+const getList = async (req, h) => {
   try {
     const {
-      query: { limit = 10, page = 1 }
+      query: { limit = 10, page = 1, state = 1 }
     } = req
-    const data = await Article.list({ state: 1 }, null, { limit: +limit, page: +page })
-    console.log(data)
+    const skip = (page - 1) * limit
+    const data = await Article.list({ state }, null, { limit, skip })
     return {
       statusCode: 200,
       ...data
     }
   } catch (error) {
-    console.log(error)
-    return boom.badRequest()
+    return Boom.badRequest(error)
   }
 }
 
@@ -97,14 +96,18 @@ const getArticle = (req, res, next) => {
   })
 }
 
-const load = (req, res, next) => {
+const getArticleById = (req, h) => {
   const { id } = req.params
   return Article.get(id)
     .then(article => {
-      req.article = article
-      return next()
+      return {
+        statusCode: 200,
+        data: article
+      }
     })
-    .catch(e => next(e))
+    .catch(e => {
+      return Boom.notFound(e)
+    })
 }
 
 /**
@@ -147,11 +150,11 @@ const remove = (req, res, next) => {
 
 module.exports = {
   list,
-  getHomeList,
+  getList,
   getArticle,
   getArticlesByTime,
   create,
   update,
   remove,
-  load
+  getArticleById
 }

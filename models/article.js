@@ -67,14 +67,15 @@ ArticleSchema.statics = {
         if (article) {
           return article
         }
-        const err = new APIError(httpStatus.NOT_FOUND, '该文章不存在!', true)
-        return Promise.reject(err)
+      })
+      .catch(e => {
+        throw new Error('该文章不存在')
       })
   },
   /**
    *
    * @param {object} findOption 查询参数
-   * @param {object} param1
+   * @param {object} skip 跳过 limit 限制个数
    * @param {object} filterOption 需要过滤掉的参数 = 0, 需要的参数 = 1
    */
   list(findOption, filterOption, { skip = 0, limit = 10 }) {
@@ -83,6 +84,12 @@ ArticleSchema.statics = {
       summary: 1,
       posterImg: 1,
       ...filterOption
+    }
+    findOption = {
+      state: {
+        $ne: 0
+      },
+      ...findOption
     }
     return Promise.all([
       this.find(findOption, filterOpts).exec(),
@@ -98,11 +105,10 @@ ArticleSchema.statics = {
     ])
       .then(result => {
         const [all, data] = result
-        const totalPage = all.length / limit
+        const totalPage = Math.ceil(all.length / limit)
         return { total: all.length, totalPage, data }
       })
       .catch(e => {
-        console.log(e)
         throw e
       })
   }

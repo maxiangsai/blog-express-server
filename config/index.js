@@ -3,11 +3,7 @@ const { env } = process
 module.exports = {
   host: env.HOST,
   port: env.PORT,
-  mongo: {
-    host: env.MONGO_HOST,
-    port: env.MONGO_PORT,
-    databaseName: env.MONGO_DATABASE_NAME
-  },
+  mongoUri: env.MONGO_URI,
   jwt: {
     secret: env.JWT_SECRET,
     expire: 60 * 60

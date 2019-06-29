@@ -3,12 +3,15 @@
 const Hapi = require('hapi')
 const mongoose = require('mongoose')
 
-// 引入配置
+// 插件
 const registerPlugins = require('./plugins')
+// 路由
 const userRoutes = require('./routes/users')
 const articleRoutes = require('./routes/article')
+const tagRoutes = require('./routes/tag')
+// 配置
 const config = require('./config')
-const { port, host, mongo } = config
+const { port, host, mongoUri } = config
 
 const server = Hapi.server({
   port,
@@ -19,9 +22,8 @@ const init = async () => {
   // 注册插件
   await registerPlugins(server)
   // 注册路由
-  server.route([...userRoutes, ...articleRoutes])
+  server.route([...userRoutes, ...articleRoutes, ...tagRoutes])
   // 连接mongodb数据库
-  const mongoUri = `${mongo.host}:${mongo.port}/${mongo.databaseName}`
   mongoose.connect(mongoUri, { useNewUrlParser: true })
   mongoose.connection.on('error', () => {
     throw new Error(`无法连接到数据库：${mongoUri}`)
@@ -30,9 +32,9 @@ const init = async () => {
   console.log(`Server running at: ${server.info.uri}`)
 }
 
-// process.on('unhandledRejection', err => {
-//   console.log(err)
-//   process.exit(1)
-// })
+process.on('unhandledRejection', err => {
+  console.log('server -- ', err)
+  process.exit(1)
+})
 // 启动服务器
 init()

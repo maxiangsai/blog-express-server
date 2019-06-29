@@ -1,80 +1,101 @@
-const Tag = require('../models/tag');
-const Article = require('../models/article');
+const Tag = require('../models/tag')
+const Article = require('../models/article')
 
-const get = (req, res, next) => {
-  Tag.list().then(list => {
-    res.json({
-      code: 200,
-      data: list
+const get = (req, h) => {
+  return Tag.list()
+    .then(list => {
+      return {
+        code: 200,
+        data: list
+      }
     })
-  }).catch(e => next(e));
+    .catch(e => {
+      throw e
+    })
 }
 
-const create = (req, res, next) => {
-  Tag.create(req.body)
+const create = (req, h) => {
+  const { payload } = req
+  return Tag.create(payload)
     .then(t => {
-      const tag = new Tag(req.body);
-      tag.save()
+      const tag = new Tag(payload)
+      tag
+        .save()
         .then(savedTag => {
-          res.json({
+          return {
             code: 200,
             data: savedTag
-          });
+          }
         })
-        .catch(e => next(e));
+        .catch(e => {
+          throw e
+        })
     })
-    .catch(e => next(e));
+    .catch(e => {
+      throw e
+    })
 }
 
-const update = (req, res, next) => {
-  const body = req.body
-  Tag.findByIdAndUpdate(body.id, body, { new: true })
+const update = (req, h) => {
+  const { payload } = req
+  Tag.findByIdAndUpdate(payload.id, payload, { new: true })
     .exec()
-    .then(tag => res.json({ code: 200, data: tag }))
-    .catch(e => next(e));
+    .then(tag => ({ code: 200, data: tag }))
+    .catch(e => {
+      throw e
+    })
 }
 
-const remove = (req, res, next) => {
-  const body = req.body
-  Tag.findByIdAndRemove(body.id)
+const remove = (req, h) => {
+  const { payload } = req
+  Tag.findByIdAndRemove(payload.id)
     .exec()
     .then(tag => {
-      res.json({
+      return {
         code: 200,
         data: tag
-      })
-    }).catch(e => next(e))
+      }
+    })
+    .catch(e => {
+      throw e
+    })
 }
 
-const getName = (req, res, next) => {
-  Tag.findById(req.params.id)
+const getName = (req, h) => {
+  const {
+    params: { id }
+  } = req
+  Tag.findById(id)
     .then(tag => {
-      req.name = tag.name
-      next()
+      return {
+        statusCode: 200,
+        data: {
+          ...tag
+        }
+      }
     })
-    .catch(e => next(e))
+    .catch(e => {
+      throw e
+    })
 }
 
 /**
  * 根据tag id查询对应文章列表
  */
-const getListByTag = (req, res, next) => {
+const getListByTag = (req, h) => {
   const { id } = req.params
-  const name = req.name
   Article.list({
-    flag: {
-      $ne: 3
-    },
     tags: id
-  }).then(ret => {
-    res.json({
-      code: 200,
-      data: ret.data,
-      total: ret.total,
-      name
-    })
   })
-  .catch(e => next(e))
+    .then(ret => {
+      res.json({
+        code: 200,
+        ...ret
+      })
+    })
+    .catch(e => {
+      throw e
+    })
 }
 
 module.exports = {

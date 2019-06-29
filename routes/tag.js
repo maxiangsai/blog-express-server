@@ -9,7 +9,7 @@ const tagCtrl = require('../controller/tag')
 //   .delete(validate(paramValid.deleteTag), tokenVerify, tagCtrl.remove)
 
 // 获取每个标签下的文章列表
-router.route('/:id').get(tagCtrl.getName, tagCtrl.getListByTag)
+// router.route('/:id').get(tagCtrl.getName, tagCtrl.getListByTag)
 
 const GROUP_NAME = '/tag'
 module.exports = [
@@ -17,7 +17,8 @@ module.exports = [
     method: 'GET',
     path: `${GROUP_NAME}`,
     options: {
-      tags: ['api', 'users']
+      tags: ['api', 'users'],
+      auth: false
     },
     handler: tagCtrl.get
   },
@@ -26,12 +27,13 @@ module.exports = [
     path: `${GROUP_NAME}/{id}`,
     options: {
       tags: ['api', 'users'],
+      auth: false,
       validate: {
         params: {
           id: Joi.string().required()
         }
       }
     },
-    handler: tagCtrl.get
+    handler: tagCtrl.getListByTag
   }
 ]

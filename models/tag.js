@@ -19,7 +19,7 @@ TagSchema.statics = {
       .exec()
       .then(tag => {
         if (tag) {
-          return Promise.reject(new Error('该标签已存在'))
+          throw new Error('该标签已存在')
         }
         return tag
       })
