@@ -47,13 +47,17 @@ const list = (req, res, next) => {
 }
 
 /**
- * 获取首页列表
+ * 获取列表(已发布，草稿)默认已发布
  */
-const getHomeList = (req, res, next) => {
-  const { limit } = req.query
-  Article.list({
-    state: 1
-  }, null, { limit })
+const getList = (req, res, next) => {
+  const { limit, state = 1 } = req.query
+  Article.list(
+    {
+      state: state
+    },
+    null,
+    { limit }
+  )
     .then(data => {
       res.json({
         code: 200,
@@ -144,7 +148,7 @@ const remove = (req, res, next) => {
 
 module.exports = {
   list,
-  getHomeList,
+  getList,
   getArticle,
   getArticlesByTime,
   create,

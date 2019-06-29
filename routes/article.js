@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.route('/')
   // 首页文章列表
-  .get(articleCtrl.getHomeList)
+  .get(articleCtrl.getList)
   // 文章归档（按时间归类）
   // 创建文章 /v1/articles
   .post(validate(paramValidation.createArticle), tokenVerify, articleCtrl.create);
