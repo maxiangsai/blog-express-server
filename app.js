@@ -15,8 +15,7 @@ const app = express()
 // Connect to mongodb
 Promise = require('bluebird')
 mongoose.Promise = Promise
-const mongoUri = config.mongo.host
-mongoose.connect(mongoUri, { useNewUrlParser: true })
+mongoose.connect(config.mongoUri, { useNewUrlParser: true })
 mongoose.connection.on('error', () => {
   throw new Error(`无法连接到数据库：${mongoUri}`)
 })
@@ -27,7 +26,7 @@ fs.existsSync(logPath) || fs.mkdirSync(logPath)
 const accessLogStream = rfs('access.log', {
   interval: '1d',
   path: logPath
-});
+})
 
 app.use(morgan('combined', { stream: accessLogStream }))
 app.use(express.json({ limit: '5mb' }))
