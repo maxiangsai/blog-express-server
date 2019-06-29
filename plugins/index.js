@@ -29,6 +29,10 @@ module.exports = async server => {
         {
           name: 'article',
           description: '文章相关接口'
+        },
+        {
+          name: 'tag',
+          description: '标签相关接口'
         }
       ]
     }

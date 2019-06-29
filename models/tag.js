@@ -1,3 +1,4 @@
+const Boom = require('boom')
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
@@ -18,10 +19,10 @@ TagSchema.statics = {
     return this.findOne(body)
       .exec()
       .then(tag => {
-        if (tag) {
-          throw new Error('该标签已存在')
-        }
         return tag
+      })
+      .catch(e => {
+        return Boom.badRequest(e)
       })
   },
 
@@ -33,6 +34,9 @@ TagSchema.statics = {
       .exec()
       .then(tag => {
         return tag
+      })
+      .catch(e => {
+        throw Boom.badGateway(e)
       })
   }
 }

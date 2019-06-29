@@ -17,7 +17,7 @@ module.exports = [
     method: 'GET',
     path: `${GROUP_NAME}`,
     options: {
-      tags: ['api', 'users'],
+      tags: ['api', 'tag'],
       auth: false
     },
     handler: tagCtrl.get
@@ -26,7 +26,7 @@ module.exports = [
     method: 'GET',
     path: `${GROUP_NAME}/{id}`,
     options: {
-      tags: ['api', 'users'],
+      tags: ['api', 'tag'],
       auth: false,
       validate: {
         params: {
@@ -34,6 +34,6 @@ module.exports = [
         }
       }
     },
-    handler: tagCtrl.getListByTag
+    handler: tagCtrl.getName
   }
 ]
