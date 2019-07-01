@@ -9,6 +9,9 @@ const registerPlugins = require('./plugins')
 const userRoutes = require('./routes/users')
 const articleRoutes = require('./routes/article')
 const tagRoutes = require('./routes/tag')
+const searchRoutes = require('./routes/search')
+const uploadRoutes = require('./routes/upload')
+
 // 配置
 const config = require('./config')
 const { port, host, mongoUri } = config
@@ -22,7 +25,7 @@ const init = async () => {
   // 注册插件
   await registerPlugins(server)
   // 注册路由
-  server.route([...userRoutes, ...articleRoutes, ...tagRoutes])
+  server.route([...userRoutes, ...articleRoutes, ...tagRoutes, ...searchRoutes, ...uploadRoutes])
   // 连接mongodb数据库
   mongoose.connect(mongoUri, { useNewUrlParser: true })
   mongoose.connection.on('error', () => {

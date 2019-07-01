@@ -1,10 +1,18 @@
-const express = require('express');
-const router = express.Router();
+const Joi = require('joi')
+const articleCtrl = require('../controller/article')
 
-const articleCtrl = require('../controller/article');
-
-router
-  .get('/:keyword', articleCtrl.list)
-
-
-module.exports = router;
+const GROUP_NAME = 'search'
+module.exports = [
+  {
+    method: 'GET',
+    path: `${GROUP_NAME}`,
+    options: {
+      validate: {
+        query: {
+          keyword: Joi.string().required()
+        }
+      }
+    },
+    handler: articleCtrl.getList
+  }
+]

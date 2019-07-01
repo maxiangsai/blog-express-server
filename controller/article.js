@@ -2,60 +2,27 @@ const Boom = require('boom')
 const Article = require('../models/article')
 
 /**
- * state: 0草稿 1发布
- * 默认查找state为1的文章
+ * keyword 关键词查询
+ * state 0草稿 1发布（默认1）
  */
-const list = (req, res, next) => {
-  let { page = 1, limit = 10, state = 1 } = req.query
-  const { keyword } = req.params
-  keyword = decodeURIComponent(keyword)
-  limit = Number(limit)
-  let findOption = {}
-  let skip = Number((page - 1) * limit) || 0
-  let reg = new RegExp(keyword, 'i')
-  if (keyword) {
-    // 通过keyword查询
-    findOption = {
-      state: {
-        $ne: 0
-      },
-      $or: [
-        {
-          title: {
-            $regex: reg
-          }
-        },
-        {
-          content: {
-            $regex: reg
-          }
-        }
-      ]
-    }
-  } else {
-    // 所有文章
-    findOption = {
-      state
-    }
-  }
-  Article.list(findOption, null, { skip, limit })
-    .then(data => {
-      res.json({
-        code: 200,
-        data: data.data,
-        total: data.total
-      })
-    })
-    .catch(e => next(e))
-}
-
 const getList = async (req, h) => {
   try {
     const {
-      query: { limit = 10, page = 1, state = 1 }
+      query: { limit = 10, page = 1, state = 1, keyword }
     } = req
     const skip = (page - 1) * limit
-    const data = await Article.list({ state }, null, { limit, skip })
+    let findOptions = {
+      state
+    }
+    if (keyword) {
+      findOptions = {
+        keyword,
+        ...findOptions
+      }
+    }
+    const data = await Article.list(findOptions, null)
+      .skip(skip)
+      .limit(+limit)
     return {
       statusCode: 200,
       ...data

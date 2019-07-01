@@ -35,10 +35,4 @@ module.exports = [
     },
     handler: userCtrl.login
   }
-  // 注册
-  // {
-  //   method: 'POST',
-  //   path: `${GROUP_NAME}/register`,
-  //   handler: userCtrl.register
-  // }
 ]
