@@ -8,21 +8,20 @@ const Article = require('../models/article')
 const getList = async (req, h) => {
   try {
     const {
-      query: { limit = 10, page = 1, state = 1, keyword }
+      query: { limit, page, state = 1, keyword }
     } = req
     const skip = (page - 1) * limit
     let findOptions = {
       state
     }
+
     if (keyword) {
       findOptions = {
         keyword,
         ...findOptions
       }
     }
-    const data = await Article.list(findOptions, null)
-      .skip(skip)
-      .limit(+limit)
+    const data = await Article.list(findOptions, null, { skip, limit })
     return {
       statusCode: 200,
       ...data
@@ -47,7 +46,7 @@ const getArticlesByTime = (req, res, next) => {
     })
     .then(list => {
       res.json({
-        code: 200,
+        statusCode: 200,
         data: list
       })
     })
@@ -56,13 +55,6 @@ const getArticlesByTime = (req, res, next) => {
 /**
  * 文章详情
  */
-const getArticle = (req, res, next) => {
-  return res.json({
-    code: 200,
-    data: req.article
-  })
-}
-
 const getArticleById = (req, h) => {
   const { id } = req.params
   return Article.get(id)
@@ -80,45 +72,36 @@ const getArticleById = (req, h) => {
 /**
  * 创建文章
  */
-const create = (req, res, next) => {
-  let body = req.body
-  const article = new Article(body)
-  article
+const create = (req, h) => {
+  let { payload } = req
+  const article = new Article(payload)
+  return article
     .save()
-    .then(resArticle => res.json({ code: 200, data: resArticle }))
-    .catch(e => next(e))
+    .then(resArticle => ({ statusCode: 200, data: resArticle }))
+    .catch(e => Boom.badImplementation(e))
 }
 
 /**
  * 修改文章
  */
-const update = (req, res, next) => {
-  const article = req.article // 文章实例
-  article.title = req.body.title
-  article.content = req.body.content
-  article.summary = req.body.summary
-  article.posterImg = req.body.posterImg
-  article.state = req.body.state
-  article.tags = req.body.tags
-
-  article
-    .save(article)
-    .then(savedArticle => res.json({ code: 200, data: savedArticle }))
-    .catch(e => next(e))
+const update = (req, h) => {
+  const { payload } = req
+  Article.findByIdAndUpdate(payload.id, payload, { new: true })
+    .exec()
+    .then(savedArticle => res.json({ statusCode: 200, data: savedArticle }))
+    .catch(e => Boom.badImplementation(e))
 }
 
-const remove = (req, res, next) => {
-  const article = req.article
-  article
-    .remove()
-    .then(savedArticle => res.json({ code: 200, data: savedArticle }))
-    .catch(e => next(e))
+const remove = (req, h) => {
+  const { params } = req
+  return Article.findByIdAndRemove(params.id)
+    .exec()
+    .then(savedArticle => ({ statusCode: 200, data: savedArticle }))
+    .catch(e => Boom.badImplementation(e))
 }
 
 module.exports = {
-  list,
   getList,
-  getArticle,
   getArticlesByTime,
   create,
   update,

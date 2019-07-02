@@ -1,7 +1,6 @@
 const config = require('../config')
 const validate = async (decoded, request) => {
   const { userId, username } = decoded
-
   if (!userId && !username) {
     return { isValid: false }
   }

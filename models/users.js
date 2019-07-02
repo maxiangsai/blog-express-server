@@ -32,14 +32,17 @@ UserSchema.statics = {
    * @param {number} id
    */
   get(id) {
-    return this.findById(id)
+    return this.findById(id, {
+      id: 1,
+      username: 1,
+      avatar: 1,
+      access: 1
+    })
       .exec()
       .then(user => {
-        if (user) {
-          return {
-            statusCode: 200,
-            data: user
-          }
+        return {
+          statusCode: 200,
+          data: user
         }
       })
   }

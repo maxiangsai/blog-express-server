@@ -5,11 +5,11 @@ const get = (req, h) => {
   return Tag.list()
     .then(list => {
       return {
-        code: 200,
+        statusCode: 200,
         data: list
       }
     })
-    .catch(e => Boom.badGateway(e))
+    .catch(e => Boom.badImplementation(e))
 }
 
 const create = (req, h) => {
@@ -17,22 +17,22 @@ const create = (req, h) => {
   return Tag.create(payload)
     .then(t => {
       const tag = new Tag(payload)
-      tag.save().then(savedTag => {
+      return tag.save().then(savedTag => {
         return {
-          code: 200,
+          statusCode: 200,
           data: savedTag
         }
       })
     })
-    .catch(e => Boom.badGateway(e))
+    .catch(e => Boom.badImplementation(e))
 }
 
 const update = (req, h) => {
   const { payload } = req
   return Tag.findByIdAndUpdate(payload.id, payload, { new: true })
     .exec()
-    .then(tag => ({ code: 200, data: tag }))
-    .catch(e => Boom.badGateway(e))
+    .then(tag => ({ statusCode: 200, data: tag }))
+    .catch(e => Boom.badImplementation(e))
 }
 
 const remove = (req, h) => {
@@ -43,32 +43,15 @@ const remove = (req, h) => {
     .exec()
     .then(tag => {
       return {
-        code: 200,
+        statusCode: 200,
         data: tag
       }
     })
-    .catch(e => Boom.badGateway(e))
-}
-
-const getName = (req, h) => {
-  const {
-    params: { id }
-  } = req
-  return Tag.findById(id)
-    .then(tag => {
-      return {
-        statusCode: 200,
-        data: {
-          name: tag.name
-        }
-      }
-    })
-    .catch(e => Boom.badRequest(e))
+    .catch(e => Boom.badImplementation(e))
 }
 
 module.exports = {
   get,
-  getName,
   create,
   update,
   remove

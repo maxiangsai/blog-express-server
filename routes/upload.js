@@ -1,7 +1,7 @@
 const Joi = require('joi')
 const qiniuConfig = require('../config/qiniu')
 
-const GROUP_NAME = 'upload'
+const GROUP_NAME = '/upload'
 module.exports = [
   // 上传需要的token
   {

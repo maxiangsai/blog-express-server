@@ -1,7 +1,7 @@
 const Joi = require('joi')
 const articleCtrl = require('../controller/article')
 
-const GROUP_NAME = 'search'
+const GROUP_NAME = '/search'
 module.exports = [
   {
     method: 'GET',

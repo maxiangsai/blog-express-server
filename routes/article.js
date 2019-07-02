@@ -27,7 +27,7 @@ const articleCtrl = require('../controller/article')
 // module.exports = router;
 const GROUP_NAME = '/articles'
 module.exports = [
-  // 获取首页列表
+  // 获取列表
   {
     method: 'GET',
     path: `${GROUP_NAME}`,
@@ -35,7 +35,10 @@ module.exports = [
       tags: ['api', 'article'],
       auth: false,
       validate: {
-        query: routeHelper.pagination
+        query: {
+          state: Joi.number().integer(),
+          ...routeHelper.pagination
+        }
       }
     },
     handler: articleCtrl.getList
@@ -54,5 +57,53 @@ module.exports = [
       }
     },
     handler: articleCtrl.getArticleById
+  },
+  {
+    method: 'POST',
+    path: `${GROUP_NAME}`,
+    options: {
+      tags: ['api', 'article'],
+      validate: {
+        payload: Joi.object({
+          content: Joi.string().required(),
+          title: Joi.string().required(),
+          posterImg: Joi.string().required(),
+          summary: Joi.string().required(),
+          tags: Joi.array().required(),
+          state: Joi.number()
+            .integer()
+            .required()
+        })
+      }
+    },
+    handler: articleCtrl.create
+  },
+  // 更新文章
+  {
+    method: 'PUT',
+    path: `${GROUP_NAME}/{id}`,
+    options: {
+      tags: ['api', 'article'],
+      validate: {
+        params: {
+          id: Joi.string().required()
+        }
+      }
+    },
+    handler: articleCtrl.update
+  },
+  // 删除文章（硬删除，空间有限）
+  {
+    method: 'DELETE',
+    path: `${GROUP_NAME}/{id}`,
+    options: {
+      tags: ['api', 'article'],
+      validate: {
+        params: {
+          id: Joi.string().required()
+        }
+      }
+    },
+    handler: articleCtrl.remove
   }
 ]

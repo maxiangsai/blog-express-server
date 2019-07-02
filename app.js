@@ -18,7 +18,12 @@ const { port, host, mongoUri } = config
 
 const server = Hapi.server({
   port,
-  host
+  host,
+  routes: {
+    cors: {
+      origin: ['*']
+    }
+  }
 })
 
 const init = async () => {

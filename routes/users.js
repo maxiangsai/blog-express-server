@@ -1,20 +1,21 @@
 'use strict'
 const Joi = require('joi')
-const paramValid = require('../utils/route-helper')
+const routeHelper = require('../utils/route-helper')
 const userCtrl = require('../controller/users')
 
 const GROUP_NAME = '/user'
 module.exports = [
+  // 获取个人信息
   {
     method: 'GET',
-    path: `${GROUP_NAME}/{userId}`,
+    path: `${GROUP_NAME}Info`,
     options: {
       tags: ['api', 'users'],
       validate: {
-        params: {
-          userId: Joi.string().required()
-        },
-        headers: paramValid.headers
+        headers: routeHelper.headers,
+        query: {
+          userId: Joi.string()
+        }
       }
     },
     handler: userCtrl.get

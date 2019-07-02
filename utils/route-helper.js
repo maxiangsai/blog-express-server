@@ -7,7 +7,7 @@ module.exports = {
     authorization: Joi.string().required()
   }).unknown(),
 
-  pagination: Joi.object({
+  pagination: {
     page: Joi.number()
       .integer()
       .min(1)
@@ -16,5 +16,5 @@ module.exports = {
       .integer()
       .min(1)
       .default(10)
-  })
+  }
 }

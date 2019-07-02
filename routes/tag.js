@@ -1,4 +1,5 @@
 const Joi = require('joi')
+const routeHelper = require('../utils/route-helper')
 const tagCtrl = require('../controller/tag')
 
 const GROUP_NAME = '/tag'
@@ -13,25 +14,10 @@ module.exports = [
     },
     handler: tagCtrl.get
   },
-  // 获取单个tag
-  {
-    method: 'GET',
-    path: `${GROUP_NAME}/{id}`,
-    options: {
-      tags: ['api', 'tag'],
-      auth: false,
-      validate: {
-        params: {
-          id: Joi.string().required()
-        }
-      }
-    },
-    handler: tagCtrl.getName
-  },
   // 删除单个tag
   {
     method: 'DELETE',
-    path: `${GROUP_NAME}/{id}`,
+    path: `${GROUP_NAME}`,
     options: {
       tags: ['api', 'tag'],
       validate: {
@@ -49,8 +35,9 @@ module.exports = [
     options: {
       tags: ['api', 'tag'],
       validate: {
+        headers: routeHelper.headers,
         payload: {
-          id: Joi.string().required()
+          name: Joi.string().required()
         }
       }
     },
@@ -64,7 +51,8 @@ module.exports = [
       tags: ['api', 'tag'],
       validate: {
         payload: {
-          id: Joi.string().required()
+          id: Joi.string().required(),
+          name: Joi.string().required()
         }
       }
     },

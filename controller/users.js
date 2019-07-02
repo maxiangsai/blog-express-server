@@ -6,14 +6,15 @@ const boom = require('boom')
  * 获取个人信息
  */
 const get = (req, h) => {
-  const { userId } = req.params
-
-  return User.get(userId)
+  const {
+    query: { userId }
+  } = req
+  const id = userId || req.auth.credentials.userId
+  return User.get(id)
     .then(({ data }) => {
-      const { id, username, avatar, access } = data
       return {
         statusCode: 200,
-        data: { id, username, avatar, access }
+        data
       }
     })
     .catch(() => {
@@ -61,20 +62,15 @@ const login = (req, h) => {
   } = req
   return User.findOne({ username })
     .then(user => {
-      if (!user) throw new Error()
       // 解密与password对比
-      return decrypt(password, user.password)
-        .then(() => {
-          return {
-            statusCode: 200,
-            data: {
-              token: sign(user)
-            }
+      return decrypt(password, user.password).then(() => {
+        return {
+          statusCode: 200,
+          data: {
+            token: sign(user)
           }
-        })
-        .catch(err => {
-          throw err
-        })
+        }
+      })
     })
     .catch(() => {
       return Boom.badRequest('用户名或者密码错误')
@@ -83,6 +79,5 @@ const login = (req, h) => {
 
 module.exports = {
   get,
-  create,
   login
 }
