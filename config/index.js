@@ -1,11 +1,7 @@
-require('env2')('./.env')
-const { env } = process
+const { parsed: { HOST, PORT, MONGO_URI } } = require('dotenv').config();
+
 module.exports = {
-  host: env.HOST,
-  port: env.PORT,
-  jwt: {
-    secret: env.JWT_SECRET,
-    expiresIn: Math.floor(new Date().getTime() / 1000) + 1 * 24 * 60 * 60
-  },
-  mongoUri: env.MONGO_URI
+  host: HOST,
+  port: PORT,
+  mongoUri: MONGO_URI
 }
