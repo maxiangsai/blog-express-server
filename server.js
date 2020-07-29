@@ -3,7 +3,7 @@ const mount = require('koa-mount');
 const graphqlHTTP = require('koa-graphql');
 const schema = require('./graphql/schema');
 const initDB = require('./database');
-const config = require('./config');
+require('dotenv').config();
 
 const app = new Koa();
 initDB();
@@ -11,13 +11,12 @@ initDB();
 app.use(mount('/api', graphqlHTTP({
   schema,
   graphiql: true
-})))
+})));
 
-app.listen(config.port, () => {
-  console.log(`Server started on ${config.port}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Server started on ${process.env.PORT}`);
 });
 
-
 app.on('error', err => {
-  log.error('server error', err);
-})
+  console.error('server error', err);
+});

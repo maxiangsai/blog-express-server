@@ -1,14 +1,13 @@
 const mongoose = require('mongoose');
-const { mongoUri } = require('./config');
 
 const initDB = () => {
-  mongoose.connect(mongoUri, {
+  mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true
   });
 
   mongoose.connection.once('open', () => {
-    console.log('connection to mongoose')
-  })
+    console.log('connection to mongoose');
+  });
 };
 
 module.exports = initDB;

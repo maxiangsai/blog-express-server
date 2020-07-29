@@ -7,6 +7,6 @@ const RootQuery = new GraphQLObjectType({
   fields: {
     queryArticleById
   }
-})
+});
 
 module.exports = RootQuery;

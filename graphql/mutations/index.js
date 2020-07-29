@@ -1,8 +1,8 @@
 const { GraphQLObjectType } = require('graphql');
 
-const addArticle = require('./mutations/addArticle');
-const updateArticle = require('./mutations/updateArticle');
-const removeArticle = require('./mutations/removeArticle');
+const addArticle = require('./addArticle');
+const updateArticle = require('./updateArticle');
+const removeArticle = require('./removeArticle');
 
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
@@ -11,6 +11,6 @@ const Mutation = new GraphQLObjectType({
     updateArticle,
     removeArticle
   }
-})
+});
 
 module.exports = Mutation;
