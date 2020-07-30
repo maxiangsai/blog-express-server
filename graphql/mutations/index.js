@@ -1,6 +1,7 @@
 const { GraphQLObjectType } = require('graphql');
 
 const addArticle = require('./addArticle');
+const addTag = require('./addTag');
 const updateArticle = require('./updateArticle');
 const removeArticle = require('./removeArticle');
 
@@ -9,7 +10,8 @@ const Mutation = new GraphQLObjectType({
   fields: {
     addArticle,
     updateArticle,
-    removeArticle
+    removeArticle,
+    addTag
   }
 });
 

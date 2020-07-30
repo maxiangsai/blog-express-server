@@ -21,6 +21,6 @@ module.exports = {
         return article.save();
       })
       .then(updatedArticle => updatedArticle)
-      .catch(err => console.log(err))
+      .catch(err => console.log(err));
   }
-}
+};

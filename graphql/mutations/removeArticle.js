@@ -11,6 +11,6 @@ module.exports = {
     return Article.findOneAndDelete(args.id).exec()
       .then(article => article.remove())
       .then(deletedArticle => deletedArticle)
-      .catch(err => console.log(err))
+      .catch(err => console.log(err));
   }
-}
+};
