@@ -9,6 +9,7 @@ const APIError = require('../utils/APIError');
 const get = (req, res, next) => {
   User.get(req.userId)
     .then(user => {
+      console.log(user)
       const { id, username, avatar, access } = user
       res.json({
         code: 200,

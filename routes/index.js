@@ -4,16 +4,16 @@ const router = express.Router();
 
 const usersRouter = require('./users');
 const articleRouter = require('./article');
-const tagRouter = require('./tag');
+const categoryRouter = require('./category');
 const uploadRouter = require('./upload');
 const searchRouter = require('./search');
 
 // 用户相关路由
-router.use('/users', usersRouter);
+router.use('/user', usersRouter);
 // 文章相关路由
-router.use('/articles', articleRouter);
+router.use(articleRouter);
 // 标签相关路由
-router.use('/tags', tagRouter);
+router.use('/categories', categoryRouter);
 // 上传相关
 router.use('/upload', uploadRouter);
 // 搜索相关

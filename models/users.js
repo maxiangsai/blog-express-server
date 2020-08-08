@@ -47,6 +47,7 @@ UserSchema.statics = {
   decryptPwd (inputPwd, userPwd) {
     return bcrypt.compare(inputPwd, userPwd)
       .then(isMatch => {
+        console.log(isMatch)
         if (isMatch) {
           return Promise.resolve();
         }

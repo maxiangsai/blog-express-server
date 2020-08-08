@@ -1,4 +1,4 @@
-const Article = require('../models/article')
+const Post = require('../models/post')
 
 /**
  * state: 0草稿 1发布
@@ -35,7 +35,7 @@ const list = (req, res, next) => {
       state
     }
   }
-  Article.list(findOption)
+  Post.list(findOption)
     .then(data => {
       res.json({
         code: 200,
@@ -51,9 +51,9 @@ const list = (req, res, next) => {
  */
 const getList = (req, res, next) => {
   const { limit, state = 1 } = req.query
-  Article.list(
+  Post.list(
     {
-      state: state
+      state
     },
     null,
     { limit }
@@ -76,7 +76,7 @@ const getArticlesByTime = (req, res, next) => {
     summary: 1,
     posterImg: 1
   }
-  Article.find({}, filterOption)
+  Post.find({}, filterOption)
     .sort({
       createdAt: -1
     })
@@ -100,7 +100,7 @@ const getArticle = (req, res, next) => {
 
 const load = (req, res, next) => {
   const { id } = req.params
-  return Article.get(id)
+  return Post.get(id)
     .then(article => {
       req.article = article
       return next()
@@ -113,7 +113,8 @@ const load = (req, res, next) => {
  */
 const create = (req, res, next) => {
   let body = req.body
-  const article = new Article(body)
+  const article = new Post(body)
+  console.log(article)
   article
     .save()
     .then(resArticle => res.json({ code: 200, data: resArticle }))

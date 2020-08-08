@@ -5,7 +5,7 @@ const Promise = require('bluebird');
 
 const Schema = mongoose.Schema;
 
-const TagSchema = new Schema({
+const CategorySchema = new Schema({
   name: {
     type: String,
     default: ''
@@ -14,7 +14,7 @@ const TagSchema = new Schema({
   timestamps: true
 })
 
-TagSchema.statics = {
+CategorySchema.statics = {
   create (body) {
     return this.findOne(body)
       .exec()
@@ -33,9 +33,9 @@ TagSchema.statics = {
         'updateAt': -1
       })
       .exec()
-      .then(tag => {
-        return tag;
+      .then(category => {
+        return category;
       })
   }
 }
-module.exports = mongoose.model('Tag', TagSchema);
+module.exports = mongoose.model('Category', CategorySchema);

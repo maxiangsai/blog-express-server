@@ -12,9 +12,7 @@ module.exports = {
     body: {
       title: Joi.string().required(),
       content: Joi.string().required(),
-      posterImg: Joi.string().required(),
-      likeNum: Joi.number(),
-      flag: Joi.number()
+      state: Joi.number()
     }
   },
   updateArticle: {
@@ -25,24 +23,24 @@ module.exports = {
       summary: Joi.string(),
       title: Joi.string().required(),
       content: Joi.string().required(),
-      posterImg: Joi.string().required()
+      cover: Joi.string()
     },
     params: {
       id: Joi.string().required()
     }
   },
-  createTag: {
+  createCategory: {
     body: {
       name: Joi.string().required()
     }
   },
-  updateTag: {
+  updateCategory: {
     body: {
       id: Joi.string().required(),
       name: Joi.string().required()
     }
   },
-  deleteTag: {
+  deleteCategory: {
     body: {
       id: Joi.string().required(),
     }

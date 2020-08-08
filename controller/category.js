@@ -1,8 +1,8 @@
-const Tag = require('../models/tag');
-const Article = require('../models/article');
+const Category = require('../models/category');
+const Article = require('../models/post');
 
 const get = (req, res, next) => {
-  Tag.list().then(list => {
+  Category.list().then(list => {
     res.json({
       code: 200,
       data: list
@@ -11,14 +11,14 @@ const get = (req, res, next) => {
 }
 
 const create = (req, res, next) => {
-  Tag.create(req.body)
+  Category.create(req.body)
     .then(t => {
-      const tag = new Tag(req.body);
-      tag.save()
-        .then(savedTag => {
+      const category = new Category(req.body);
+      category.save()
+        .then(saved => {
           res.json({
             code: 200,
-            data: savedTag
+            data: saved
           });
         })
         .catch(e => next(e));
@@ -28,28 +28,28 @@ const create = (req, res, next) => {
 
 const update = (req, res, next) => {
   const body = req.body
-  Tag.findByIdAndUpdate(body.id, body, { new: true })
+  Category.findByIdAndUpdate(body.id, body, { new: true })
     .exec()
-    .then(tag => res.json({ code: 200, data: tag }))
+    .then(category => res.json({ code: 200, data: category }))
     .catch(e => next(e));
 }
 
 const remove = (req, res, next) => {
   const body = req.body
-  Tag.findByIdAndRemove(body.id)
+  Category.findByIdAndRemove(body.id)
     .exec()
-    .then(tag => {
+    .then(category => {
       res.json({
         code: 200,
-        data: tag
+        data: category
       })
     }).catch(e => next(e))
 }
 
 const getName = (req, res, next) => {
-  Tag.findById(req.params.id)
-    .then(tag => {
-      req.name = tag.name
+  Category.findById(req.params.id)
+    .then(category => {
+      req.name = category.name
       next()
     })
     .catch(e => next(e))
@@ -58,11 +58,11 @@ const getName = (req, res, next) => {
 /**
  * 根据tag id查询对应文章列表
  */
-const getListByTag = (req, res, next) => {
+const getListByCategory = (req, res, next) => {
   const { id } = req.params
   const name = req.name
   Article.list({
-    tags: id
+    categories: id
   }).then(ret => {
     res.json({
       code: 200,
@@ -76,7 +76,7 @@ const getListByTag = (req, res, next) => {
 module.exports = {
   get,
   getName,
-  getListByTag,
+  getListByCategory,
   create,
   update,
   remove

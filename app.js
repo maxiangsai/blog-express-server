@@ -1,4 +1,5 @@
 'use strict'
+const config = require('./config')
 const path = require('path')
 const fs = require('fs')
 const express = require('express')
@@ -9,13 +10,14 @@ const morgan = require('morgan')
 const rfs = require('rotating-file-stream')
 const cors = require('cors')
 const APIError = require('./utils/APIError')
-const config = require('./config')
+
 
 const app = express()
 // Connect to mongodb
 Promise = require('bluebird')
 mongoose.Promise = Promise
-mongoose.connect(config.mongoUri, { useNewUrlParser: true })
+console.log(config.mongoUri)
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true })
 mongoose.connection.on('error', () => {
   throw new Error(`无法连接到数据库：${mongoUri}`)
 })
@@ -66,6 +68,7 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
+  console.log(err)
   res.status(err.status).json({
     code: err.status,
     message: err.isPublic ? err.message : httpStatus[err.status]

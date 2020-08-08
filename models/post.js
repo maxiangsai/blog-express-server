@@ -5,7 +5,7 @@ const APIError = require('../utils/APIError');
 
 const Schema = mongoose.Schema;
 // state: 1发布 0草稿
-const ArticleSchema = new Schema({
+const PostSchema = new Schema({
   title: {
     required: true,
     type: String
@@ -14,42 +14,30 @@ const ArticleSchema = new Schema({
     required: true,
     type: String
   },
-  posterImg: {
+  cover: {
     type: String,
-    required: true
+    default: 'http://img.ydman.cn/img_1.jpg'
   },
-  summary: {
+  description: {
     type: String
-  },
-  likeNum: {
-    type: Number,
-    default: 0
-  },
-  previousArticle: {
-    type: Object,
-    default: null
-  },
-  nextArticle: {
-    type: Object,
-    default: null
   },
   state: {
     type: Number,
-    default: 1
+    default: 0
   },
-  tags: [{
+  categories: [{
     type: Schema.Types.ObjectId,
-    ref: 'Tag'
+    ref: 'Category'
   }]
 }, {
   timestamps: true
 })
 
-ArticleSchema.statics = {
+PostSchema.statics = {
   get (id) {
     return this.findById(id)
       .populate({
-        path: 'tags',
+        path: 'categories',
         select: 'id name'
       })
       .then(article => {
@@ -75,7 +63,7 @@ ArticleSchema.statics = {
     return Promise.all([
       this.find(findOption, filterOption).exec(),
       this.find(findOption, filterOption).populate({
-        path: 'tags',
+        path: 'categories',
         select: 'id name'
       })
       .sort({ createdAt: 1 })
@@ -87,4 +75,4 @@ ArticleSchema.statics = {
   }
 }
 
-module.exports = mongoose.model('Article', ArticleSchema);
+module.exports = mongoose.model('Post', PostSchema);

@@ -7,7 +7,8 @@ const { secret } = config.jwt;
 // 验证token获取userId
 const tokenVerify = (req, res, next) => {
   const authToken = req.get('Authorization');
-  const t = req.body.token || req.query.token || (authToken && authToken.split(' ')[1]);
+  console.log(authToken)
+  const t = req.body.token || req.query.token || authToken;
   if (!t) {
     const err = new APIError(httpStatus.BAD_REQUEST, 'token不能为空!', true);
     return next(err);
